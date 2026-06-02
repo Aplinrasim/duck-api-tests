@@ -1,31 +1,25 @@
-package clients;
+package autotests.clients;
 
 import com.consol.citrus.TestCaseRunner;
-import com.consol.citrus.http.client.HttpClient;
-import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
-import com.consol.citrus.validation.json.JsonPathMessageValidationContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.consol.citrus.message.MessageType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import autotests.test.EndpointConfig;
-
+import org.springframework.core.io.ClassPathResource;
+import com.consol.citrus.message.builder.ObjectMappingPayloadBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Locale;
 
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-@ContextConfiguration(classes = {EndpointConfig.class})
-public class DuckActionsClient extends TestNGCitrusSpringSupport {
+public class DuckActionsClient extends DuckClient {
 
-    @Autowired
-    protected HttpClient duckService;
 
-    public void duckSwim(TestCaseRunner runner, String id) {
+    public void duckProperties(TestCaseRunner runner, String id) {
         runner.$(http()
                 .client(duckService)
                 .send()
-                .get("/api/duck/action/swim")
+                .get("/api/duck/action/properties")
                 .queryParam("id", id));
     }
 
@@ -37,6 +31,14 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
+    public void duckSwim(TestCaseRunner runner, String id) {
+        runner.$(http()
+                .client(duckService)
+                .send()
+                .get("/api/duck/action/swim")
+                .queryParam("id", id));
+    }
+
     public void duckQuack(TestCaseRunner runner, String id, String repetitionCount, String soundCount) {
         runner.$(http()
                 .client(duckService)
@@ -45,14 +47,6 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .queryParam("id", id)
                 .queryParam("repetitionCount", repetitionCount)
                 .queryParam("soundCount", soundCount));
-    }
-
-    public void duckProperties(TestCaseRunner runner, String id) {
-        runner.$(http()
-                .client(duckService)
-                .send()
-                .get("/api/duck/action/properties")
-                .queryParam("id", id));
     }
 
     public void createDuck(TestCaseRunner runner, String color, double height, String material, String sound, String wingsState) {
@@ -91,24 +85,14 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .body(expectedBody));
     }
 
-    public void validateStatus(TestCaseRunner runner, HttpStatus status) {
+    public void validateCreateDuckFromFile(TestCaseRunner runner, String filePath) {
         runner.$(http()
                 .client(duckService)
                 .receive()
-                .response(status));
-    }
-
-    public void deleteDuck(TestCaseRunner runner, String id) {
-        runner.$(http()
-                .client(duckService)
-                .send()
-                .delete("/api/duck/delete")
-                .queryParam("id", id));
-
-        runner.$(http()
-                .client(duckService)
-                .receive()
-                .response(HttpStatus.OK));
+                .response(HttpStatus.OK)
+                .message()
+                .type(MessageType.JSON)
+                .body(new ClassPathResource(filePath)));
     }
 
     public void updateDuck(TestCaseRunner runner, String id, String color, String height, String material, String sound, String wingsState) {
@@ -122,5 +106,40 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .queryParam("material", material)
                 .queryParam("sound", sound)
                 .queryParam("wingsState", wingsState));
+    }
+
+    public void deleteDuck(TestCaseRunner runner, String id) {
+        runner.$(http()
+                .client(duckService)
+                .send()
+                .delete("/api/duck/delete")
+                .queryParam("id", id));
+    }
+
+    public void validateStatus(TestCaseRunner runner, HttpStatus status) {
+        runner.$(http()
+                .client(duckService)
+                .receive()
+                .response(status));
+    }
+
+    public void validateResponseFromFile(TestCaseRunner runner, String expectedPayload) {
+        runner.$(http()
+                .client(duckService)
+                .receive()
+                .response(HttpStatus.OK)
+                .message()
+                .type(MessageType.JSON)
+                .body(new ClassPathResource(expectedPayload)));
+    }
+
+    public void validateResponseFromPayload(TestCaseRunner runner, Object expectedPayload) {
+        runner.$(http()
+                .client(duckService)
+                .receive()
+                .response(HttpStatus.OK)
+                .message()
+                .type(MessageType.JSON)
+                .body(new ObjectMappingPayloadBuilder(expectedPayload, new ObjectMapper())));
     }
 }

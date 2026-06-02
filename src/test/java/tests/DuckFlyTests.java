@@ -1,28 +1,32 @@
 package tests;
+
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import clients.DuckActionsClient;
+import autotests.clients.DuckActionsClient;
+import autotests.payloads.MessageResponse;
 
 public class DuckFlyTests extends DuckActionsClient {
 
-    @Test(description = "Active wings - duck flies")
+
+    @Test(description = "Активные крылья, валидация из responses")
     @CitrusTest
     public void testFlyWithActiveWings(@Optional @CitrusResource TestCaseRunner runner) {
         duckFly(runner, "10");
-        validateResponse(runner, "{\"message\": \"I am flying :)\"}");
+        validateResponseFromFile(runner, "responses/getDuckFlyTest/flyActiveWings.json");
     }
 
-    @Test(description = "Undefined wings - error")
+    @Test(description = "Неопределенные крылья, валидация из файла")
     @CitrusTest
     public void testFlyWithUndefinedWings(@Optional @CitrusResource TestCaseRunner runner) {
         duckFly(runner, "13");
-        validateResponse(runner, "{\"message\": \"Wings are not detected :(\"}");
+        MessageResponse expectedResponse = new MessageResponse("Wings are not detected :(");
+        validateResponseFromPayload(runner, expectedResponse);
     }
 
-    @Test(description = "Fixed wings - duck cannot fly")
+    @Test(description = "Фиксированные крылья, валидация по String")
     @CitrusTest
     public void testFlyWithFixedWings(@Optional @CitrusResource TestCaseRunner runner) {
         duckFly(runner, "14");
