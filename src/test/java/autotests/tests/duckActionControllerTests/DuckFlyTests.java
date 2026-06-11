@@ -1,4 +1,4 @@
-package tests;
+package autotests.tests.duckActionControllerTests;
 
 import autotests.clients.FlyClient;
 import autotests.payloads.MessageResponse;

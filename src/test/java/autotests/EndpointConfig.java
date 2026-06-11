@@ -1,4 +1,4 @@
-package autotests.config;
+package autotests;
 
 import com.consol.citrus.http.client.HttpClient;
 import com.consol.citrus.http.client.HttpClientBuilder;

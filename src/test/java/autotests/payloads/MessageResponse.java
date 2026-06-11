@@ -1,20 +1,21 @@
 package autotests.payloads;
 
-public class MessageResponse {
-    private String message;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Getter
+@Setter
+@Accessors(fluent = true)
+public class MessageResponse {
+
+    @JsonProperty
+    private String message;
     public MessageResponse() {
     }
-
     public MessageResponse(String message) {
         this.message = message;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

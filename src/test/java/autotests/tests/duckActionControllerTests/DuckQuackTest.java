@@ -1,4 +1,4 @@
-package tests;
+package autotests.tests.duckActionControllerTests;
 
 import autotests.clients.QuackClient;
 import autotests.payloads.SoundResponse;

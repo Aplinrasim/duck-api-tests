@@ -1,4 +1,4 @@
-package tests;
+package autotests.tests.duckActionControllerTests;
 
 import autotests.clients.SwimClient;
 import com.consol.citrus.TestCaseRunner;

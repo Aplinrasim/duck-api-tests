@@ -1,20 +1,21 @@
 package autotests.payloads;
 
-public class SoundResponse {
-    private String sound;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Getter
+@Setter
+@Accessors(fluent = true)
+public class SoundResponse {
+
+    @JsonProperty
+    private String sound;
     public SoundResponse() {
     }
-
     public SoundResponse(String sound) {
         this.sound = sound;
     }
 
-    public String getSound() {
-        return sound;
-    }
-
-    public void setSound(String sound) {
-        this.sound = sound;
-    }
 }

@@ -1,40 +1,18 @@
 package autotests.clients;
 
-import autotests.config.EndpointConfig;
+import autotests.BaseTest;
+import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
-import com.consol.citrus.http.client.HttpClient;
-import com.consol.citrus.message.MessageType;
-import com.consol.citrus.message.builder.ObjectMappingPayloadBuilder;
-import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Step;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Locale;
 
-import static com.consol.citrus.actions.ExecuteSQLAction.Builder.sql;
 import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 @ContextConfiguration(classes = {EndpointConfig.class})
-public class DuckClient extends TestNGCitrusSpringSupport {
+public class DuckClient extends BaseTest {
 
-    @Autowired
-    protected HttpClient duckService;
-
-    protected final String BASE_URL = "http://localhost:2222";
-    @Autowired
-    protected SingleConnectionDataSource testDb;
-
-    @Step("Выполнение SQL запроса: {sql}")
-    public void executeSql(TestCaseRunner runner, String sql) {
-        runner.$(sql(testDb)
-                .statement(sql));
-    }
 
     @Step("Создание утки в БД с автогенерацией ID и извлечением ID")
     public void createDuckInDatabase(TestCaseRunner runner, String color, double height,
@@ -73,7 +51,7 @@ public class DuckClient extends TestNGCitrusSpringSupport {
     public void createDuckTable(TestCaseRunner runner) {
         executeSql(runner, "DROP TABLE IF EXISTS DUCK");
         String sql = "CREATE TABLE DUCK (" +
-                "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +  // Ключевое изменение!
+                "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                 "color VARCHAR(255), " +
                 "height DOUBLE, " +
                 "material VARCHAR(255), " +
@@ -83,39 +61,4 @@ public class DuckClient extends TestNGCitrusSpringSupport {
         executeSql(runner, sql);
     }
 
-    @Step("Проверка статуса ответа: {status}")
-    public void validateStatus(TestCaseRunner runner, org.springframework.http.HttpStatus status) {
-        runner.$(http()
-                .client(duckService)
-                .receive()
-                .response(status));
-    }
-    @Step("Проверка ответа: {expectedBody}")
-    public void validateResponse(TestCaseRunner runner, String expectedBody) {
-        runner.$(http()
-                .client(duckService)
-                .receive()
-                .response(org.springframework.http.HttpStatus.OK)
-                .message()
-                .contentType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-                .body(expectedBody));
-    }
-    public void validateResponseFromFile(TestCaseRunner runner, String expectedPayload) {
-        runner.$(http()
-                .client(duckService)
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body(new ClassPathResource(expectedPayload)));
-    }
-    public void validateResponseFromPayload(TestCaseRunner runner, Object expectedPayload) {
-        runner.$(http()
-                .client(duckService)
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body(new ObjectMappingPayloadBuilder(expectedPayload, new ObjectMapper())));
-    }
 }

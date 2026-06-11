@@ -1,4 +1,4 @@
-package tests;
+package autotests.tests.duckConrollerTests;
 
 import autotests.clients.CreateClient;
 import autotests.payloads.CreateDuckRequest;
@@ -6,19 +6,14 @@ import autotests.payloads.CreateDuckResponse;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
-import com.consol.citrus.message.MessageType;
-import com.consol.citrus.message.builder.ObjectMappingPayloadBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
-import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 
 @Epic("Тесты duck-action-controller")
@@ -60,16 +55,7 @@ public class DuckCreateTest extends CreateClient {
                 .material("wood")
                 .sound("quack")
                 .wingsState("FIXED");
-
-        runner.$(http()
-                .client(BASE_URL)
-                .send()
-                .post("/api/duck/create")
-                .message()
-                .contentType("application/json")
-                .type(MessageType.JSON)
-                .body(new ObjectMappingPayloadBuilder(request, new ObjectMapper())));
-
+        createDuckWithModel(runner, request);
         CreateDuckResponse expectedResponse = new CreateDuckResponse()
                 .id("@isNumber()@")
                 .color("yellow")
@@ -77,14 +63,6 @@ public class DuckCreateTest extends CreateClient {
                 .material("wood")
                 .sound("quack")
                 .wingsState("FIXED");
-
-        runner.$(http()
-                .client(BASE_URL)
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body(new ObjectMappingPayloadBuilder(expectedResponse, new ObjectMapper())));
+        validateResponseFromPayload(runner, expectedResponse);
     }
-
 }

@@ -1,4 +1,4 @@
-package tests;
+package autotests.tests.duckConrollerTests;
 
 import autotests.clients.DeleteClient;
 import com.consol.citrus.TestCaseRunner;
