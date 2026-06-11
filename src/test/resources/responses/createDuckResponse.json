@@ -1,0 +1,8 @@
+{
+  "id": "@isNumber()@",
+  "color": "yellow",
+  "height": 10.0,
+  "material": "rubber",
+  "sound": "quack",
+  "wingsState": "UNDEFINED"
+}

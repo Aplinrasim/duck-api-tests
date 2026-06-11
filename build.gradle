@@ -1,11 +1,15 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.12.0'
 }
 
 group = 'com.example'
 version = '1.0-SNAPSHOT'
 
 repositories {
+    maven {
+        url = uri('https://maven-central.storage.yandexcloud.net/repository/central/')
+    }
     mavenCentral()
 }
 
@@ -18,8 +22,19 @@ dependencies {
     testImplementation 'org.slf4j:slf4j-reload4j:2.0.7'
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+    testImplementation 'org.springframework:spring-core:5.3.30'
+    testImplementation 'org.springframework:spring-test:5.3.30'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    testImplementation 'com.consol.citrus:citrus-sql:3.4.0'
+//    testImplementation 'com.h2database:h2:2.2.224'
+    testImplementation 'org.springframework:spring-jdbc:5.3.30'
+    testImplementation 'com.h2database:h2:1.4.196'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 test {
-    useJUnitPlatform()
+    useTestNG()
 }
