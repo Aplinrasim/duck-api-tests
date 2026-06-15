@@ -1,10 +1,10 @@
-package tests;
+package autotests.tests;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import clients.DuckActionsClient;
+import autotests.clients.DuckActionsClient;
 
 public class DuckFlyTests extends DuckActionsClient {
 
