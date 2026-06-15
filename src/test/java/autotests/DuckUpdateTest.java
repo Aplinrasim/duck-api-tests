@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-public class DuckUpdateTests extends TestNGCitrusSupport {
+public class DuckUpdateTest extends TestNGCitrusSupport {
 
     @Test(description = "Update duck color and height")
     @CitrusTest

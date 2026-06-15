@@ -10,7 +10,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
-public class DuckPropertiesTests extends TestNGCitrusSupport {
+public class DuckPropertiesTest extends TestNGCitrusSupport {
 
     @Test(description = "ID - целое четное число. Есть в БД (утка с material = wood)")
     @CitrusTest

@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-public class DuckCreateTests extends TestNGCitrusSupport {
+public class DuckCreateTest extends TestNGCitrusSupport {
 
     @Test(description = "Создать утку с material = rubber")
     @CitrusTest

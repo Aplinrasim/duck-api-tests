@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-public class DuckFlyTests extends TestNGCitrusSupport {
+public class DuckFlyTest extends TestNGCitrusSupport {
 
     @Test(description = "Существующий id с активными крыльями (ACTIVE) - утка летит")
     @CitrusTest
@@ -29,6 +29,7 @@ public class DuckFlyTests extends TestNGCitrusSupport {
                 .message()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body("{\"message\": \"I am flying :)\"}"));
+        //Баг. Сообщение по требованиям без смайлов
     }
 
     @Test(description = "Существующий id со связанными крыльями (FIXE) - утка не летит")
@@ -47,6 +48,7 @@ public class DuckFlyTests extends TestNGCitrusSupport {
                 .message()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body("{\"message\": \"I can not fly :C\"}"));
+        //Баг. Сообщение по требованиям без смайлов
     }
 
     @Test(description = "Существующий id с крыльями в неопределенном состоянии (UNDEFINED) - ошибка")
@@ -65,5 +67,6 @@ public class DuckFlyTests extends TestNGCitrusSupport {
                 .message()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body("{\"message\": \"Wings are not detected :(\"}"));
+        //Баг. Сообщение по требованиям без смайлов
     }
 }

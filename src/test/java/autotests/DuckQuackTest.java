@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-public class DuckQuackTests extends TestNGCitrusSupport {
+public class DuckQuackTest extends TestNGCitrusSupport {
 
     @Test(description = "Проверка кряканья с корректным нечётным id, корректный звук")
     @CitrusTest
@@ -21,8 +21,8 @@ public class DuckQuackTests extends TestNGCitrusSupport {
                 .send()
                 .get("/api/duck/action/quack")
                 .queryParam("id", "1")
-                .queryParam("repetitionCount", "1")
-                .queryParam("soundCount", "1"));
+                .queryParam("repetitionCount", "2")
+                .queryParam("soundCount", "3"));
 
         runner.run(http()
                 .client("http://localhost:2222")
@@ -30,7 +30,8 @@ public class DuckQuackTests extends TestNGCitrusSupport {
                 .response(HttpStatus.OK)
                 .message()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body("{\"sound\": \"quack\"}"));
+                .body("{\"sound\": \"quack-quack, quack-quack, quack-quack\"}"));
+        //Баг. Колличество повторений и колличество звуков поменяны местами в ответе
     }
 
     @Test(description = "Проверка кряканья с корректным чётным id, корректный звук")
@@ -41,8 +42,8 @@ public class DuckQuackTests extends TestNGCitrusSupport {
                 .send()
                 .get("/api/duck/action/quack")
                 .queryParam("id", "2")
-                .queryParam("repetitionCount", "1")
-                .queryParam("soundCount", "1"));
+                .queryParam("repetitionCount", "2")
+                .queryParam("soundCount", "3"));
 
         runner.run(http()
                 .client("http://localhost:2222")
@@ -50,7 +51,7 @@ public class DuckQuackTests extends TestNGCitrusSupport {
                 .response(HttpStatus.OK)
                 .message()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body("{\"sound\": \"moo\"}"));
+                .body("{\"sound\": \"moo-moo, moo-moo, moo-moo\"}"));
         //Баг. Звук выводится некорректный
     }
 }
